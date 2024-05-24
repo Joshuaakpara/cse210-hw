@@ -1,0 +1,2 @@
+0|1
+ChecklistGoal|solsa|1300|0|2000|10
