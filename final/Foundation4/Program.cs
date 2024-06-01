@@ -1,133 +1,55 @@
 using System;
 using System.Collections.Generic;
 
-// Address class
-public class Address
+// Comment class
+public class Comment
 {
-    private string street;
-    private string city;
-    private string stateProvince;
-    private string country;
+    public string CommenterName { get; private set; }
+    public string CommentText { get; private set; }
 
-    public Address(string street, string city, string stateProvince, string country)
+    public Comment(string commenterName, string commentText)
     {
-        this.street = street;
-        this.city = city;
-        this.stateProvince = stateProvince;
-        this.country = country;
-    }
-
-    public bool IsInUSA()
-    {
-        return country.Equals("USA", StringComparison.OrdinalIgnoreCase);
-    }
-
-    public string GetFullAddress()
-    {
-        return $"{street}\n{city}, {stateProvince}\n{country}";
+        CommenterName = commenterName;
+        CommentText = commentText;
     }
 }
 
-// Customer class
-public class Customer
+// Video class
+public class Video
 {
-    private string name;
-    private Address address;
+    public string Title { get; private set; }
+    public string Author { get; private set; }
+    public int Length { get; private set; } // in seconds
+    private List<Comment> comments = new List<Comment>();
 
-    public Customer(string name, Address address)
+    public Video(string title, string author, int length)
     {
-        this.name = name;
-        this.address = address;
+        Title = title;
+        Author = author;
+        Length = length;
     }
 
-    public bool IsInUSA()
+    public void AddComment(Comment comment)
     {
-        return address.IsInUSA();
+        comments.Add(comment);
     }
 
-    public string GetName()
+    public int GetNumberOfComments()
     {
-        return name;
+        return comments.Count;
     }
 
-    public Address GetAddress()
+    public void DisplayVideoInfo()
     {
-        return address;
-    }
-}
-
-// Product class
-public class Product
-{
-    private string name;
-    private string productId;
-    private decimal price;
-    private int quantity;
-
-    public Product(string name, string productId, decimal price, int quantity)
-    {
-        this.name = name;
-        this.productId = productId;
-        this.price = price;
-        this.quantity = quantity;
-    }
-
-    public decimal GetTotalCost()
-    {
-        return price * quantity;
-    }
-
-    public string GetName()
-    {
-        return name;
-    }
-
-    public string GetProductId()
-    {
-        return productId;
-    }
-}
-
-// Order class
-public class Order
-{
-    private List<Product> products = new List<Product>();
-    private Customer customer;
-
-    public Order(Customer customer)
-    {
-        this.customer = customer;
-    }
-
-    public void AddProduct(Product product)
-    {
-        products.Add(product);
-    }
-
-    public decimal GetTotalCost()
-    {
-        decimal totalCost = 0;
-        foreach (var product in products)
+        Console.WriteLine($"Title: {Title}");
+        Console.WriteLine($"Author: {Author}");
+        Console.WriteLine($"Length: {Length} seconds");
+        Console.WriteLine($"Number of Comments: {GetNumberOfComments()}");
+        Console.WriteLine("Comments:");
+        foreach (var comment in comments)
         {
-            totalCost += product.GetTotalCost();
+            Console.WriteLine($"- {comment.CommenterName}: {comment.CommentText}");
         }
-        totalCost += customer.IsInUSA() ? 5 : 35;
-        return totalCost;
-    }
-
-    public string GetPackingLabel()
-    {
-        string label = "Packing List:\n";
-        foreach (var product in products)
-        {
-            label += $"{product.GetName()} (ID: {product.GetProductId()})\n";
-        }
-        return label;
-    }
-
-    public string GetShippingLabel()
-    {
-        return $"Shipping to:\n{customer.GetName()}\n{customer.GetAddress().GetFullAddress()}";
     }
 }
 
@@ -136,35 +58,35 @@ public class Program
 {
     public static void Main()
     {
-        // Create addresses
-        Address address1 = new Address("123 Main St", "Somewhere", "NY", "USA");
-        Address address2 = new Address("456 Elm St", "Anywhere", "ON", "Canada");
+        // Create videos
+        Video video1 = new Video("Understanding Abstraction", "John Doe", 300);
+        Video video2 = new Video("Mastering Encapsulation", "Jane Smith", 450);
+        Video video3 = new Video("Inheritance Basics", "Alice Johnson", 360);
+        Video video4 = new Video("Polymorphism Explained", "Bob Brown", 420);
 
-        // Create customers
-        Customer customer1 = new Customer("John Doe", address1);
-        Customer customer2 = new Customer("Jane Smith", address2);
+        // Add comments to videos
+        video1.AddComment(new Comment("User1", "Great explanation!"));
+        video1.AddComment(new Comment("User2", "Very helpful, thanks!"));
+        video1.AddComment(new Comment("User3", "I learned a lot."));
 
-        // Create products
-        Product product1 = new Product("Laptop", "L123", 799.99m, 1);
-        Product product2 = new Product("Mouse", "M456", 19.99m, 2);
-        Product product3 = new Product("Keyboard", "K789", 49.99m, 1);
+        video2.AddComment(new Comment("User4", "Clear and concise."));
+        video2.AddComment(new Comment("User5", "Excellent video!"));
 
-        // Create orders
-        Order order1 = new Order(customer1);
-        order1.AddProduct(product1);
-        order1.AddProduct(product2);
+        video3.AddComment(new Comment("User6", "I finally understand inheritance!"));
+        video3.AddComment(new Comment("User7", "This was so useful."));
+        video3.AddComment(new Comment("User8", "Thanks for the tutorial."));
 
-        Order order2 = new Order(customer2);
-        order2.AddProduct(product2);
-        order2.AddProduct(product3);
+        video4.AddComment(new Comment("User9", "Polymorphism rocks!"));
+        video4.AddComment(new Comment("User10", "Well explained."));
+        video4.AddComment(new Comment("User11", "Great content as always."));
 
-        // Display order details
-        List<Order> orders = new List<Order> { order1, order2 };
-        foreach (var order in orders)
+        // Create a list of videos
+        List<Video> videos = new List<Video> { video1, video2, video3, video4 };
+
+        // Display video information
+        foreach (var video in videos)
         {
-            Console.WriteLine(order.GetPackingLabel());
-            Console.WriteLine(order.GetShippingLabel());
-            Console.WriteLine($"Total Cost: {order.GetTotalCost():C}");
+            video.DisplayVideoInfo();
             Console.WriteLine();
         }
     }
